@@ -1,0 +1,30 @@
+version: '3'
+services:
+  vault:
+    image: vault
+    ports:
+      - 8200:8200
+    container_name: vault
+    hostname: vault
+    cap_add:
+      - "IPC_LOCK"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    entrypoint: "vault server -dev"
+
+  test-webhook:
+    build: ./app
+    container_name: test-webhook
+    hostname: test-webhook
+    expose:
+      - 8080
+
+  vault-agent:
+    build: ./vault-agent
+    container_name: vault-agent
+    environment:
+      - VAULT_ADDR=http://vault:8200
+    volumes:
+      - "./vault-agent/config:/vault-agent:rw"
+    entrypoint: "vault agent -log-level debug -config=/vault-agent/config.hcl"

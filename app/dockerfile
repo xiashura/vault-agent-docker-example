@@ -1,0 +1,9 @@
+FROM golang:alpine
+
+COPY . .
+
+RUN go build -o app main.go 
+
+EXPOSE 8080
+
+CMD ./app

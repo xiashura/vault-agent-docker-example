@@ -1,0 +1,5 @@
+tmp
+vault-agent/config/roleid
+vault-agent/config/secretid
+vault-agent/config/token
+.vscode
